@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+ <html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">    
+     <head>
+         <div th:replace="~{fragment :: meta}"></div>   
+              
+         <div th:replace="~{fragment :: styles}"></div>
+
+         <title>店舗詳細</title>   
+     </head>
+     <body>
+         <div class="nagoyameshi-wrapper">
+             <!-- ヘッダー -->
+             <div th:replace="~{fragment :: header}"></div>
+             
+             <main>
+                 <div class="container pt-4 pb-5 nagoyameshi-container">
+                     <div class="row justify-content-center">
+                         <div class="col-xxl-9 col-xl-10 col-lg-11">
+                             <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                                 <ol class="breadcrumb mb-0">                        
+                                     <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                                     <li class="breadcrumb-item"><a th:href="@{/stores}">店舗一覧</a></li>
+                                     <li class="breadcrumb-item active" aria-current="page">店舗詳細</li>
+                                 </ol>
+                             </nav> 
+                             
+                             <h1 class="mb-4 text-center" th:text="${store.getName()}"></h1>                                                           
+                             
+                             <div th:if="${errorMessage}" class="alert alert-danger">
+                                 <span th:text="${errorMessage}"></span>
+                             </div>                                                                         
+                             
+                             <div class="mb-4">
+                                 <img th:if="${store.getImageName()}" th:src="@{/storage/__${store.getImageName()}__}" class="w-100" alt="店舗画像">
+                                 <img th:unless="${store.getImageName()}" th:src="@{/images/noImage.png}" class="w-100" alt="NO IMAGE">
+                             </div> 
+                             
+                             <div class="container">  
+                                 <div class="row">
+                                     <div class="col-lg-8 container mb-4">            
+                                         <div class="row pb-2 mb-2 border-bottom">
+                                             <div class="col-4">
+                                                 <span class="fw-bold">店舗名</span>
+                                             </div>
+                     
+                                             <div class="col">
+                                                 <span th:text="${store.getName()}"></span>
+                                             </div>
+                                         </div>
+										 
+										 <div class="row pb-2 mb-2 border-bottom">
+                                            <div class="col-4">
+                                                <span class="fw-bold">価格</span>
+                                            </div>
+											
+											<div class="col">
+												<span th:text="${ #numbers.formatInteger(store.getPrice(), 1, 'COMMA') + '円'}"></span>
+											</div>
+                                        </div>            
+                     
+                                         <div class="row pb-2 mb-2 border-bottom">
+                                             <div class="col-4">
+                                                 <span class="fw-bold">説明</span>
+                                             </div>
+                     
+                                             <div class="col">
+                                                 <span class="nagoyameshi-pre-wrap" th:text="${store.getDescription()}"></span>
+                                             </div>
+                                         </div>                          
+                                         
+                                         <div class="row pb-2 mb-2 border-bottom">
+                                             <div class="col-4">
+                                                 <span class="fw-bold">郵便番号</span>
+                                             </div>
+                     
+                                             <div class="col">
+                                                 <span th:text="${store.getPostalCode()}"></span>
+                                             </div>
+                                         </div>   
+                                         
+                                         <div class="row pb-2 mb-2 border-bottom">
+                                             <div class="col-4">
+                                                 <span class="fw-bold">住所</span>
+                                             </div>
+                     
+                                             <div class="col">
+                                                 <span th:text="${store.getAddress()}"></span>
+                                             </div>
+                                         </div> 
+										 
+										  <div class="row pb-2 mb-2 border-bottom">
+										     <div class="col-4">
+										         <span class="fw-bold">営業時間</span>
+										     </div>
+										 	
+										 	<div class="col">
+										 		<span th:text="${store.getBusinessHours()}"></span>
+										 	</div>
+										 </div>   
+                                         
+                                         <div class="row pb-2 mb-2 border-bottom">
+                                             <div class="col-4">
+                                                 <span class="fw-bold">電話番号</span>
+                                             </div>
+                     
+                                             <div class="col">
+                                                 <span th:text="${store.getPhoneNumber()}"></span>
+                                             </div>
+                                         </div>                                
+                                     </div>
+                                     
+                                     <div sec:authorize="isAnonymous()" class="col-lg-4 px-0 ps-lg-4 mb-4">                  
+                                         <div class="card">
+                                             <div class="card-body">                                                                                                                                                                                                                     
+                                                 <p class="card-text">予約するには<a th:href="@{/login}">ログイン</a>が必要です。</p>                                                                                                                                            
+                                                 <button type="submit" class="btn text-white shadow-sm w-100 nagoyameshi-btn" disabled>予約する</button>                                                                                                                
+                                             </div>
+                                         </div>  
+                                     </div>
+									 
+									 <div sec:authorize="isAuthenticated()" class="col-lg-4 px-0 ps-lg-4 mb-4">                  
+	                                      <div class="card">
+	                                          <div class="card-body"> 
+	                                              <form method="get" th:action="@{/stores/__${store.getId()}__/reservation/input}" th:object="${reservationInputForm}">      
+													
+													<div class="form-group mb-2">                                            
+                                                         <label for="reservationDate" class="col-form-label text-md-left fw-bold">予約日</label>    
+														 <div th:if="${#fields.hasErrors('reservationDate')}" class="text-danger small mb-2" th:errors="*{reservationDate}"></div>
+														 <input type="text" class="form-control" th:field="*{reservationDate}"  placeholder="1900/01/01">                                                                    
+                                                     </div>
+													
+													  <div class="form-group mb-2">                                            
+  	                                                      <label for="ReservationTime" class="col-form-label text-md-left fw-bold">予約時間</label>    
+  	                                                      <div th:if="${#fields.hasErrors('reservationTime')}" class="text-danger small mb-2" th:errors="*{reservationTime}"></div>                                                                                                            
+															<select class="form-control form-select" id="reservationTime" th:field="*{reservationTime}">
+													           <option value="" hidden>選択してください</option>
+                                                               <option value="10:00">10:00</option>
+                                                               <option value="10:30">10:30</option>                                                                                                      
+                                                               <option value="11:00">11:00</option>                                                                                                      
+                                                               <option value="11:30">11:30</option>                                                                                                       
+                                                               <option value="12:00">12:00</option>                                                                                                       
+                                                               <option value="12:30">12:30</option>                                                                                                     
+                                                               <option value="13:00">13:00</option>                                                                                                       
+                                                               <option value="13:30">13:30</option>                                                                                                       
+                                                               <option value="14:00">14:00</option>                                                                                                      
+                                                               <option value="14:30">14:30</option>                                                                                                      
+                                                               <option value="15:00">15:00</option>                                                                                                      
+                                                               <option value="15:30">15:30</option>                                                                                                       
+                                                               <option value="16:00">16:00</option>                                                                                                      
+                                                               <option value="16:30">16:30</option>                                                                                                       
+                                                               <option value="17:00">17:00</option>                                                                                                       
+                                                               <option value="17:30">17:30</option>																		   							   
+                                                               <option value="18:00">18:00</option>																	  								
+															   <option value="18:30">18:30</option>																	  								
+															   <option value="19:00">19:00</option>																		  								
+															   <option value="19:30">19:30</option>																		                               
+															   <option value="20:00">20:00</option>																		                                
+															   <option value="20:30">20:30</option>																		                               
+															   <option value="21:00">21:00</option>                                                  
+                           									</select>                             
+ 														</div>
+	                                                  
+	                                                  <div class="form-group mb-4">                                            
+	                                                      <label for="numberOfPeople" class="col-form-label text-md-left fw-bold">予約人数</label>  
+	                                                      <div th:if="${#fields.hasErrors('numberOfPeople')}" class="text-danger small mb-2" th:errors="*{numberOfPeople}"></div>                                            
+	                                                      <input type="number" class="form-control" th:field="*{numberOfPeople}" min="1">                                                                     
+	                                                  </div>
+	                                                                                                      
+	                                                  <div class="form-group">
+	                                                      <button type="submit" class="btn text-white shadow-sm w-100 nagoyameshi-btn">予約する</button>
+	                                                  </div>
+	                                              </form>
+											  
+												                                                              
+	                                          </div>
+	                                      </div>
+					 							<form method="get" th:action="@{/stores/__${store.getId()}__/favorite/input}" th:object="${favoriteInputForm}">
+						  							<div class="form-group">					
+						  							 <button type="submit" class="btn text-white shadow-sm w-100 nagoyameshi-favorite-btn">お気に入り</button>
+						  							</div>
+												</form>  
+												                                                                         
+                                 </div>                                                                                             
+                             </div>
+                         </div>
+						 
+						 <h1 class="mb-4 text-center">レビュー</h1>
+						 
+						 <div class="d-flex justify-content-end">                                
+                              <a th:href="@{/review/register}" class="btn text-white shadow-sm mb-3 nagoyameshi-btn">投稿</a>
+                          </div> 
+						 
+						  <table class="table">
+						      <thead>
+						          <tr>                            
+						  		<th scope="col">氏名</th>
+						  		<th scope="col">レビューコメント</th>
+						        <th scope="col"></th>                                     
+						          </tr>
+						      </thead>   
+						      <tbody>                                                    
+								<tr th:each="review : ${reviewPage.getContent}">
+								    <td>
+									<a th:href="@{/stores/__${review.getUser.getId}__}" th:text="${review.getUser.getName}"></a>
+								    </td>
+								 <td th:text="${review.reviewComment}"></td>
+						  	  </tr>                                    
+						      </tbody>
+						  </table>
+                     </div>
+
+                 </div>
+				 
+             </main>
+             
+             <!-- フッター -->
+             <div th:replace="~{fragment :: footer}"></div>
+         </div>    
+         
+         <div th:replace="~{fragment :: scripts}"></div>  
+		
+ </html>
+ 
+ 
+ 

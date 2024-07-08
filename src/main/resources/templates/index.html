@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+		<div th:replace="~{fragment :: meta}"></div>   
+		             
+		<div th:replace="~{fragment :: styles}"></div>
+        
+		<title>NAGOYAMESHI</title>	
+    </head>
+    <body>
+		<div class="nagoyameshi-wrapper">
+		             <!-- ヘッダー -->
+		             <div th:replace="~{fragment :: header}"></div>
+		             
+		             <main>
+		                 <div class="container pt-4 pb-5 nagoyameshi-container">
+							
+		                     <div th:if="${param.loggedIn}" class="alert alert-info">
+		                         ログインしました。
+		                     </div>  
+		                     
+		                     <div th:if="${param.loggedOut}" class="alert alert-info">
+		                         ログアウトしました。
+		                     </div>
+							 
+							 <div th:if="${successMessage}" class="alert alert-info">
+		                          <span th:text="${successMessage}"></span>
+		                      </div>
+							  
+
+								<h2 class="text-center mb-3">店舗名から探す</h2> 
+								<div class="row justify-content-center">
+		                         <form method="get" th:action="@{/stores}" class="mb-5 nagoyameshi-search-form">
+		                             <div class="input-group">
+		                                 <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="店舗名">
+		                                 <button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">検索</button> 
+		                             </div>               
+		                         </form>
+								 </div>                                                                    
+                     
+                     <div class="row justify-content-center">
+                         <div class="col-xl-5 col-lg-6 col-md-8">                    
+                     
+                             <h2 class="text-center mb-3">カテゴリから探す</h2>                                        
+                              
+                             <table class="table">
+                                 <tbody>                                                       
+                                     <tr>
+<!--                                         <th>カテゴリ</th>-->
+<!--                                         <td>-->
+<!--                                             <a th:href="@{/stores?category_id=1}" class="btn text-white shadow-sm nagoyameshi-store-btn">焼き肉</a>-->
+<!--                                             <a th:href="@{/stores?category_id=2}" class= "btn text-white shadow-sm nagoyameshi-store-btn">和食</a>-->
+<!--                                             <a th:href="@{/stores?category_id=3}" class= "btn text-white shadow-sm nagoyameshi-store-btn">中華</a>-->
+<!--                                             <a th:href="@{/stores?category_id=4}"  class= "btn text-white shadow-sm nagoyameshi-store-btn">イタリアン</a>-->
+<!--                                             <a th:href="@{/stores?category_id=5}"  class= "btn text-white shadow-sm nagoyameshi-store-btn">ラーメン</a>-->
+<!--                                             <a th:href="@{/stores?category_id=6}"  class= "btn text-white shadow-sm nagoyameshi-store-btn">ハンバーガー</a>-->
+<!--											 <a th:href="@{/stores?category_id=7}"  class= "btn text-white shadow-sm nagoyameshi-store-btn">焼き鳥</a>-->
+<!--											 <a th:href="@{/stores?category_id=8}" 	 class= "btn text-white shadow-sm nagoyameshi-store-btn">丼物</a>-->
+<!--											 <a th:href="@{/stores?category_id=9}" class= "btn text-white shadow-sm nagoyameshi-store-btn">居酒屋</a>-->
+<!--											 <a th:href="@{/stores?category_id=10}"class= "btn text-white shadow-sm nagoyameshi-store-btn">フレンチ</a>-->
+<!--											 <a th:href="@{/stores?category_id=11}" class= "btn text-white shadow-sm nagoyameshi-store-btn">手羽先</a>-->
+<!--											 <a th:href="@{/stores?category_id=12}"  class= "btn text-white shadow-sm nagoyameshi-store-btn">おでん</a>-->
+<!--											 <a th:href="@{/stores?category_id=13}" class= "btn text-white shadow-sm nagoyameshi-store-btn">ウナギ</a>-->
+<!--											 <a th:href="@{/stores?category_id=14}" class= "btn text-white shadow-sm nagoyameshi-store-btn">うどん</a>	-->
+<!--											 <a th:href="@{/stores?category_id=15}" class= "btn text-white shadow-sm nagoyameshi-store-btn">揚げ物</a>-->
+<!--											 <a th:href="@{/stores?category_id=16}" class= "btn text-white shadow-sm nagoyameshi-store-btn">おにぎり</a>-->
+<!--                                         </td>                              -->
+                                     
+
+                    <div class="card-body">
+                        <form method="get" th:action="@{/stores}" class="w-100">
+                            <div class="form-group mb-3">
+
+							
+                                <select class="form-control form-select" name="category">  
+                                    <option value="" hidden>選択してください</option>   
+
+                                    <optgroup label="カテゴリ">                                  
+                                        <option value="焼き肉" th:selected="${category == '焼き肉'}">焼き肉</option>                                                
+                                        <option value="和食" th:selected="${category == '和食'}">和食</option>
+                                        <option value="中華" th:selected="${category == '中華'}">中華</option>
+                                        <option value="イタリアン" th:selected="${category == 'イタリアン'}">イタリアン</option>
+                                        <option value="ラーメン" th:selected="${category == 'ラーメン'}">ラーメン</option>
+                                        <option value="ハンバーガー" th:selected="${category == 'ハンバーガー'}">ハンバーガー</option>
+									 <option value="焼き鳥" th:selected="${category == '焼き鳥'}">焼き鳥</option>
+									 <option value="丼物" th:selected="${category == '丼物'}">丼物</option>
+									 <option value="居酒屋" th:selected="${category == '居酒屋'}">居酒屋</option>
+									 <option value="フレンチ" th:selected="${category == 'フレンチ'}">フレンチ</option>
+									 <option value="手羽先" th:selected="${category == '手羽先'}">手羽先</option>
+									 <option value="おでん" th:selected="${category == 'おでん'}">おでん</option>
+									 <option value="ウナギ" th:selected="${category == 'ウナギ'}">ウナギ</option>
+									 <option value="うどん" th:selected="${category == 'うどん'}">うどん</option>
+									 <option value="揚げ物" th:selected="${category == '揚げ物'}">揚げ物</option>
+									 <option value="おにぎり" th:selected="${category == 'おにぎり'}">おにぎり</option>
+									 
+                                    </optgroup>
+                                                                                                                                 
+                                </select> 
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn text-white shadow-sm w-100 nagoyameshi-btn">検索</button>
+                            </div>                                           
+                        </form>
+                    </div>
+
+
+
+
+</tr>                                                                                                                                                                                                                                                                                                                                                                 
+                                 </tbody>
+                             </table>  
+                         </div>
+                     </div>
+					 
+				 
+					 
+					 
+					 
+                      <h2 class="text-center mb-3">新着</h2>
+                      <div class="row row-cols-lg-5 row-cols-2 g-3 mb-5">                                        
+                          <div class="col" th:each="newStore : ${newStores}">
+                              <a th:href="@{/stores/__${newStore.getId()}__}" class="link-dark nagoyameshi-card-link">
+                                  <div class="card h-100">                                                                        
+                                      <img th:if="${newStore.getImageName()}" th:src="@{/storage/__${newStore.getImageName()}__}" class="card-img-top nagoyameshi-vertical-card-image" alt="店舗画像">                                     
+                                      <img th:unless="${newStore.getImageName()}" th:src="@{/images/noImage.png}" class="card-img-top nagoyameshi-vertical-card-image" alt="NO IMAGE">                                                                                                                        
+                                      <div class="card-body">                                    
+                                          <h3 class="card-title" th:text="${newStore.getName()}"></h3>
+                                          <p class="card-text mb-1">
+                                              <small class="text-muted" th:text="${newStore.getAddress()}"></small>                                            
+                                          </p>
+ <!--                                         <p class="card-text">-->
+ <!--                                             <span th:text="${#numbers.formatInteger(newS.getPrice(), 1, 'COMMA') + '円 / 泊'}"></span>                                            -->
+ <!--                                         </p>                                    -->
+                                      </div>
+                                  </div>    
+                              </a>            
+                          </div>                                               
+                      </div>
+				</div> 
+             </main>
+             
+             <!-- フッター -->
+             <div th:replace="~{fragment :: footer}"></div>
+         </div>    
+         
+         <div th:replace="~{fragment :: scripts}"></div>
+    </body>
+</html>
