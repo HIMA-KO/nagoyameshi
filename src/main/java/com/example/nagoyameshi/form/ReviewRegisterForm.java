@@ -11,5 +11,13 @@ public class ReviewRegisterForm {
      private Integer storeId;
      
      private Integer userId;  
+     
+     public Integer getStoreId() {
+         return storeId;
+     }
+
+     public void setStoreId(Integer storeId) {
+         this.storeId = storeId;
+     }
 
 }

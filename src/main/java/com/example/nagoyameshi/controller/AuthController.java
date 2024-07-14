@@ -90,6 +90,10 @@ public class AuthController {
     public String terms() {        
     return "auth/terms";
     }
+	
+	
+	
+	  
 }
 
 

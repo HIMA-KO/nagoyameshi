@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout</title>
+</head>
+<body>
+    <button id="checkout-button">Checkout</button>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe = Stripe('pk_test_51PMqvcAC6MZyAJYhKFow17o3Aw5LeBDTtClrhQ2UI86ylCzFjD126LORAu74TXwgcqRuc8YpyaHsnWT37thWcYNL00guHtbl7o');  // Replace with your actual public key
+        
+        document.getElementById('checkout-button').addEventListener('click', function () {
+            fetch('/api/checkout/create-session?planName=ProPlan&amount=1000', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.sessionUrl) {
+                    window.location.href = data.sessionUrl;
+                } else {
+                    console.error(data.error);
+                }
+            })
+            .catch(error => console.error(error));
+        });
+    </script>
+</body>
+</html>

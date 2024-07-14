@@ -1,13 +1,18 @@
 package com.example.nagoyameshi.service;
 
+import java.util.Calendar;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.nagoyameshi.entity.PasswordResetToken;
 import com.example.nagoyameshi.entity.Role;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.SignupForm;
 import com.example.nagoyameshi.form.UserEditForm;
+import com.example.nagoyameshi.repository.PasswordResetTokenRepository;
 import com.example.nagoyameshi.repository.RoleRepository;
 import com.example.nagoyameshi.repository.UserRepository;
 
@@ -26,7 +31,7 @@ public class UserService {
     @Transactional
     public User create(SignupForm signupForm) {
         User user = new User();
-        Role role = roleRepository.findByName("ROLE_GENERAL");
+        Role role = roleRepository.findByName("ROLE_FREE_MEMBERSHIP");
         
         user.setName(signupForm.getName());
         user.setFurigana(signupForm.getFurigana());
@@ -76,7 +81,72 @@ public class UserService {
         public boolean isEmailChanged(UserEditForm userEditForm) {
             User currentUser = userRepository.getReferenceById(userEditForm.getId());
             return !userEditForm.getEmail().equals(currentUser.getEmail());      
-    } 
+    }
+
+
+	    @Autowired
+	    private PasswordResetTokenRepository tokenRepository;
+	    @Autowired
+	    private UserRepository userRepository1;
+	    @Autowired
+	    private PasswordEncoder passwordEncoder1;
+
+	    public User findUserByEmail(String email) {
+	        return userRepository.findByEmail(email);
+	    }
+
+	    public void createPasswordResetTokenForUser(User user, String token) {
+	    	PasswordResetToken myToken = new PasswordResetToken(token, user);
+	      tokenRepository.save(myToken);
+	    }
+	    
+	    public String validatePasswordResetToken(String token) {
+	        PasswordResetToken passToken = PasswordResetToken.findByToken(token);
+	        if (passToken == null || passToken.isExpired()) {
+	            return "invalidToken";
+	        }
+
+	        Calendar cal = Calendar.getInstance();
+	        if ((passToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+	            return "expired";
+	        }
+
+	        return null;
+	    }
+	    
+	    public User getUserByPasswordResetToken(String token) {
+	    	PasswordResetToken passToken = PasswordResetTokenRepository.findByToken(token);
+	    	return passToken.getUser();
+	    }
+
+	    public void updatePassword1(User user, String newPassword) {
+	    	 user.setPassword(passwordEncoder.encode(newPassword));
+	         userRepository.save(user);
+	    }
+	    
+//	    @Transactional
+//	    public void update(PasswordEditForm passwordEditForm) {
+//	        User user = userRepository.getReferenceById(passwordEditForm.getId());
+//	        
+//	        user.setPassword(passwordEncoder.encode(passwordEditForm.getPassword()));
+//	        
+//	        userRepository.save(user);
+//	    }
+
+		public User getUserByPasswordResetToken(Object token) {
+			// TODO 自動生成されたメソッド・スタブ
+			return null;
+		}
+
+		public void updatePassword(User user, String password) {
+			// TODO 自動生成されたメソッド・スタブ
+			
+		}
+
+		public String validatePasswordResetToken(Object token) {
+			// TODO 自動生成されたメソッド・スタブ
+			return null;
+		}   
 
 }
 

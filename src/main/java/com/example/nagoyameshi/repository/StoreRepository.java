@@ -1,6 +1,7 @@
 package com.example.nagoyameshi.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ public interface StoreRepository extends JpaRepository<Store, Integer> {
 	public Page<Store> findByCategory_NameOrderByPriceDesc(String category, Pageable pageable);
 	public Page<Store> findByPriceLessThanEqualOrderByPriceDesc(Integer price, Pageable pageable);
 	public Page<Store> findAllByOrderByPriceDesc(Pageable pageable);
+	public Optional<Store> findById(Long storeId);
  
 
 

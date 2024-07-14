@@ -1,14 +1,8 @@
-//package com.example.nagoyameshi.repository;
-//
-//import com.example.nagoyameshi.entity.Review;
-//
-//public interface ReviewRepository {
-//
-//	Review getReferenceById(Integer id);
-//
-//}
+
 
 package com.example.nagoyameshi.repository;
+
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +14,8 @@ import com.example.nagoyameshi.entity.User;
 
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 	public Page<Review> findByUserOrderByCreatedAtDesc(User user, Pageable pageable);
+
+	List<Review> findByStoreId(Long storeId);
 	
 	}
 

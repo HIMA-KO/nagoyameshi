@@ -38,7 +38,24 @@
                                          <div th:if="${#fields.hasErrors('reviewComment')}" class="text-danger small mb-2" th:errors="*{reviewComment}"></div>                                        
                                          <textarea class="form-control" th:field="*{reviewComment}" cols="30" rows="5"></textarea>
                                      </div>
-                                 </div>                                                                                                                       
+                                 </div> 
+								 
+								 <div class="form-group row mb-3">
+								         <div class="col-md-4">
+								             <label for="storeId" class="col-form-label text-md-left fw-bold">ストア</label>
+								         </div>
+								         <div class="col-md-8">                            
+								             <div th:if="${#fields.hasErrors('storeId')}" class="text-danger small mb-2" th:errors="*{storeId}"></div>
+								             <select class="form-control" th:field="*{storeId}">
+								                 <option value="" disabled selected>選択してください</option>
+								                 <!-- ThiymesやSpring MVCでモデルから店舗のリストを渡す必要があります。 -->
+								                 <option th:each="store : ${stores}" th:value="${store.id}" th:text="${store.name}"></option>
+								             </select>
+								         </div>
+								     </div>
+								 
+								 
+								                                                                                                                     
                                  
                                  <div class="form-group d-flex justify-content-center my-4">
                                      <button type="submit" class="btn text-white shadow-sm w-50 nagoyameshi-btn">登録</button>

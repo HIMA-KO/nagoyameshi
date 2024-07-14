@@ -195,18 +195,38 @@
 						          <tr>                            
 						  		<th scope="col">氏名</th>
 						  		<th scope="col">レビューコメント</th>
-						        <th scope="col"></th>                                     
+						        <th scope="col">日付</th>                                     
 						          </tr>
 						      </thead>   
 						      <tbody>                                                    
-								<tr th:each="review : ${reviewPage.getContent}">
+								<tr th:each="review : ${reviews}">
 								    <td>
-									<a th:href="@{/stores/__${review.getUser.getId}__}" th:text="${review.getUser.getName}"></a>
+									<a th:href="@{/review/${review.user.id}}" th:text="${review.user.name}"></a>
 								    </td>
 								 <td th:text="${review.reviewComment}"></td>
+								 <td th:text="${#temporals.format(review.createdAt, 'yyyy-MM-dd')}"></td>
 						  	  </tr>                                    
 						      </tbody>
 						  </table>
+						  
+                           <div th:if="${reviewPage.getTotalPages() > 1}" class="d-flex justify-content-center">
+                               <nav aria-label="レビュー一覧ページ">
+                                   <ul class="pagination">
+                                       <li class="page-item">
+                                           <span th:if="${reviewPage.isFirst()}" class="page-link disabled">前</span>
+                                           <a th:unless="${reviewPage.isFirst()}" th:href="@{/review(page = ${reviewPage.getNumber() - 1})}" class="page-link nagoyameshi-page-link">前</a>
+                                       </li>
+                                       <li th:each="i : ${#numbers.sequence(0, reviewPage.getTotalPages() - 1)}" class="page-item">
+                                           <span th:if="${i == reviewPage.getNumber()}" class="page-link active nagoyameshi-active" th:text="${i + 1}"></span>
+                                           <a th:unless="${i == reviewPage.getNumber()}" th:href="@{/review(page = ${i})}" class="page-link nagoyameshi-page-link" th:text="${i + 1}"></a>
+                                       </li>
+                                       <li class="page-item">                        
+                                           <span th:if="${reviewPage.isLast()}" class="page-link disabled">次</span>
+                                           <a th:unless="${reviewPage.isLast()}" th:href="@{/review(page = ${reviewPage.getNumber() + 1})}" class="page-link nagoyameshi-page-link">次</a>
+                                       </li>
+                                   </ul>
+                               </nav> 
+                           </div>           
                      </div>
 
                  </div>

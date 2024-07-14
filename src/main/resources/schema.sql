@@ -86,7 +86,14 @@ CREATE TABLE IF NOT EXISTS stores (
  	 FOREIGN KEY (user_id) REFERENCES users(id)
  );
  
- 
+ CREATE TABLE IF NOT EXISTS passwordreset_tokens(
+ 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ 	user_id INT NOT NULL UNIQUE,
+ 	token VARCHAR(255) NOT NULL,
+ 	expiry_date DATETIME NOT NULL,
+ 	FOREIGN KEY(user_id) REFERENCES users (id),
+ 	UNIQUE (token)
+ );
  
  
  
